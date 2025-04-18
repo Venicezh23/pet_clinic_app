@@ -1,19 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Pet Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Add Pet Profile</h1>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Save Pet Profile</button>
-        </form>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Add Pet Profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Name Field -->
+        <div class="row mb-3">
+            <label for="id_name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                {{ form.name }}
+            </div>
+        </div>
+
+        <!-- Breed Field -->
+        <div class="row mb-3">
+            <label for="id_breed" class="col-sm-2 col-form-label">Breed</label>
+            <div class="col-sm-10">
+                {{ form.breed }}
+            </div>
+        </div>
+
+        <!-- Date of Birth Field -->
+        <div class="row mb-3">
+            <label for="id_dob" class="col-sm-2 col-form-label">Date of Birth</label>
+            <div class="col-sm-10">
+                {{ form.dob }}
+            </div>
+        </div>
+
+        <!-- Photo Field -->
+        <div class="row mb-3">
+            <label for="id_photo" class="col-sm-2 col-form-label">Photo</label>
+            <div class="col-sm-10">
+                {{ form.photo }}
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary mt-3">Save Pet Profile</button>
+    </form>
+</div>
+
+
+{% endblock %}

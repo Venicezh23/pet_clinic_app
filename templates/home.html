@@ -35,6 +35,7 @@
         <p>No pets yet. Add some to get started!</p>
     {% endif %}
 
+    <!---
     <div class="my-3">
         <a href="{% url 'add_pet_profile' %}" class="btn btn-primary">Add Pet Profile</a>
     </div>
@@ -48,14 +49,11 @@
     </a>
 
     <a href="{% url 'logout' %}" class="btn btn-outline-danger mt-3">Logout</a>
-
+-->
 {% else %}
     <p>Please <a href="{% url 'login' %}">log in</a> to see your pets.</p>
 {% endif %}
 {% endblock %}
-
-
-<!--<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
