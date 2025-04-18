@@ -8,32 +8,37 @@
 {% if user.is_authenticated %}
     <h2>Your Pets</h2>
     {% if pets %}
-        <ul class="list-group">
-            {% for pet in pets %}
-                <li class="list-group-item d-flex align-items-center">
-                    {% if pet.signed_url %}
-                        <img src="{{ pet.signed_url }}" alt="{{ pet.name }}" class="img-thumbnail me-3" style="width: 80px; height: 80px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-light me-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                            <span class="text-muted">No photo</span>
-                        </div>
-                    {% endif %}
-                    <div>
-                        <strong>{{ pet.name }}</strong>
-                        {% if pet.breed %}<br><small>Breed: {{ pet.breed }}</small>{% endif %}
-                        {% if pet.dob %}<br><small>Born: {{ pet.dob }}</small>{% endif %}
-                    </div>
-                    <div class="ms-auto">
-                        <a href="{% url 'pets:edit_pet_profile' pet.id %}" class="btn btn-primary">Edit</a>
-                        <a href="{% url 'appointments:book_appointment' pet.id %}" class="btn btn-success btn-sm">Book Appointment</a>
-                        <a href="{% url 'pets:add_medical_record' pet.id %}" class="btn btn-info btn-sm">Add Medical Record</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for pet in pets %}
+            <div class="col">
+            <div class="card h-100">
+                {% if pet.signed_url %}
+                <img src="{{ pet.signed_url }}" class="card-img-top" alt="{{ pet.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                    <span class="text-muted">No photo</span>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                <h5 class="card-title">{{ pet.name }}</h5>
+                <p class="card-text">
+                    {% if pet.breed %}<strong>Breed:</strong> {{ pet.breed }}<br>{% endif %}
+                    {% if pet.dob %}<strong>Born:</strong> {{ pet.dob }}{% endif %}
+                </p>
+                </div>
+                <div class="card-footer d-flex justify-content-between flex-wrap">
+                <a href="{% url 'pets:edit_pet_profile' pet.id %}" class="btn btn-primary btn-sm mb-1">Edit Profile</a>
+                <a href="{% url 'appointments:book_appointment' pet.id %}" class="btn btn-success btn-sm mb-1">Book Appointment</a>
+                <a href="{% url 'pets:add_medical_record' pet.id %}" class="btn btn-info btn-sm mb-1">Add Medical Record</a>
+                </div>
+            </div>
+            </div>
+        {% endfor %}
+        </div>
     {% else %}
         <p>No pets yet. Add some to get started!</p>
     {% endif %}
+  
 
     <!---
     <div class="my-3">

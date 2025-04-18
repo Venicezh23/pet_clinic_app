@@ -1,11 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Edit Pet Profile</h2>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save Changes</button>
-    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow rounded-4">
+                <div class="card-header rounded-top-4" style="background-color: rgb(212, 147, 125); color: black;">
+                    <h4 class="mb-0">Edit Pet Profile</h4>
+                </div>                
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-danger">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

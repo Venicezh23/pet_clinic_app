@@ -1,28 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Book Appointment</title>
-</head>
-<body>
-    <h1>Book an Appointment for {{ pet.name }}</h1>
-    
-    <form method="POST">
-        {% csrf_token %}
-        <div>
-            <label for="vet">Veterinarian:</label>
-            <select name="vet" required>
-                {% for vet in veterinarians %}
-                    <option value="{{ vet.id }}">{{ vet.name }} - {{ vet.expertise }}</option>
-                {% endfor %}
-            </select>
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - Pet Clinic App{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow rounded-4">
+                <div class="card-header rounded-top-4" style="background-color: rgb(212, 147, 125); color: black;">
+                    <h4 class="mb-0">Book an Appointment for {{ pet.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="vet" class="form-label">Select a Veterinarian:</label>
+                            <select name="vet" id="vet" class="form-select" required>
+                                {% for vet in veterinarians %}
+                                    <option value="{{ vet.id }}">{{ vet.name }} - {{ vet.expertise }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appt_datetime" class="form-label">Appointment Date & Time:</label>
+                            <input type="datetime-local" name="appt_datetime" id="appt_datetime" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description:</label>
+                            <textarea name="description" id="id_description" class="form-control">{{ form.description.value }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Book Appointment</button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-danger">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="appt_datetime">Appointment Date & Time:</label>
-            <input type="datetime-local" name="appt_datetime" required>
-            <label for="id_description">Description:</label>
-            <textarea name="description" id="id_description" class="form-control">{{ form.description.value }}</textarea>
-        </div>
-        <button type="submit">Book Appointment</button>
-    </form>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}
