@@ -7,7 +7,7 @@
 
 <!-- Pet Filter Dropdown -->
 <form method="GET" action="{% url 'appointments:appointment_list' %}">
-    <label for="pet_filter">Filter by Pet:</label>
+    <label for="pet_filter" style="padding-top: 20px; padding-bottom: 20px;">Filter by Pet:</label>
     <select name="pet_id" id="pet_filter" onchange="this.form.submit()">
         <option value="">All Pets</option>
         {% for pet in owner_pets %}
@@ -34,6 +34,7 @@
             <th>Date & Time</th>
             <th>Status</th>
             <th>Description</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +53,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="4">No appointments found.</td>
+                <td colspan="6">No appointments found.</td>
             </tr>
         {% endfor %}
     </tbody>
