@@ -113,9 +113,9 @@ WSGI_APPLICATION = 'django_on_cloudrun.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '<database_name>',
-        'USER': '<username>',
-        'PASSWORD': '<username>',
+        'NAME': 'django-dev-db',
+        'USER': 'postgres',
+        'PASSWORD': '4c*y%AcT}dXmch]v',
         #'HOST': '/cloudsql/pet-tracker-app-453709:asia-southeast1:django-dev-db',
         'HOST': '127.0.0.1',
         'PORT': '5432',
