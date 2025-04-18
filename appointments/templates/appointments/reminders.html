@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Your Reminders</h2>
+  {% if reminders %}
+    <ul>
+      {% for reminder in reminders %}
+        <li>
+          <strong>{{ reminder.appointment.pet.name }}</strong> - 
+          {{ reminder.message }} 
+          (Sent on: {{ reminder.sent_at }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reminders found.</p>
+  {% endif %}
+{% endblock %}

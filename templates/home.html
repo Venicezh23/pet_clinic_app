@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    <body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Welcome, {{ user.username }}!</h1>
+
+        {% if user.is_authenticated %}
+            <h2>Your Pets</h2>
+            {% if pets %}
+                <ul class="list-group">
+                    {% for pet in pets %}
+                        <li class="list-group-item d-flex align-items-center">
+                            {% if pet.signed_url %}
+                                <!-- <p style="font-size:10px; word-break:break-all;">{{ pet.signed_url }} test</p> -->
+                                <img src="{{ pet.signed_url }}" alt="{{ pet.name }}" class="img-thumbnail me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-light me-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                    <span class="text-muted">No photo</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ pet.name }}</strong>
+                                {% if pet.breed %}<br><small>Breed: {{ pet.breed }}</small>{% endif %}
+                                {% if pet.dob %}<br><small>Born: {{ pet.dob }}</small>{% endif %}
+                            </div>
+                            <div class="ms-auto">
+                                <a href="{% url 'pets:edit_pet_profile' pet.id %}" class="btn btn-primary">Edit</a>
+                                <a href="{% url 'appointments:book_appointment' pet.id %}" class="btn btn-sucess btn-sm">Book Appointment</a>
+                                <a href="{% url 'pets:add_medical_record' pet.id %}" class="btn btn-info btn-sm">Add Medical Record</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No pets yet. Add some to get started!</p>
+            {% endif %}
+
+            <!--Adding a Pet Profile-->
+            <div>
+                <a href="{% url 'add_pet_profile' %}" class="btn btn-primary">Add Pet Profile</a>
+            </div>
+
+            <a href="{% url 'appointments:appointment_list' %}" class="btn btn-primary">
+                View All Appointments
+            </a>
+
+            <a href="{% url 'pets:medical_record_list' %}" class="btn btn-primary">
+                View All Medical Records
+            </a>
+
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to see your pets.</p>
+        {% endif %}
+
+    </div>
+    </body>
+
+</html>

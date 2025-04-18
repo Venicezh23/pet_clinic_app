@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Vaccination</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+
+<a href="{% url 'pets:medical_record_list' %}" class="btn btn-secondary">Cancel</a>
+{% endblock %}

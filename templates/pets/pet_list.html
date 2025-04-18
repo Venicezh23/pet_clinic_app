@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Pets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Your Pets</h1>
+    {% if pets %}
+        <ul class="list-group">
+            {% for pet in pets %}
+                <li class="list-group-item">{{ pet.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No pets yet. Add some to get started!</p>
+    {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-4">Back to Home</a>
+</div>
+
+</body>
+</html>

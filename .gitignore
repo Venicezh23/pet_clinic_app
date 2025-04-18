@@ -1,0 +1,22 @@
+# Virtual Environment
+venv/
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database
+*.sqlite3
+
+# Environment Variables
+.env
+
+# Django Migrations
+*/migrations/
+
+# Cache
+*.log
+
+#JSON file
+pet-tracker-app-*.json

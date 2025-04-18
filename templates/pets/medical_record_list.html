@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Medical Records{% endblock %}
+{% block content %}
+<h2>All Medical Records</h2>
+
+<!-- Pet Filter Dropdown -->
+<form method="GET" action="{% url 'pets:medical_record_list' %}">
+    <label for="pet_filter">Filter by Pet:</label>
+    <select name="pet_id" id="pet_filter" onchange="this.form.submit()">
+        <option value="">All Pets</option>
+        {% for pet in owner_pets %}
+            <option value="{{ pet.id }}" {% if pet.id|stringformat:"s" == selected_pet_id %}selected{% endif %}>
+                {{ pet.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<!-- Medical Records Table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Pet</th>
+            <th>Appointment</th>
+            <th>Veterinarian</th>
+            <th>Vaccinations</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in medical_records %}
+            <tr>
+                <td>{{ record.pet.name }}</td>
+                <td>{{ record.appointment.appt_datetime|default:"N/A" }}</td>
+                <td>{{ record.vet_name|default:"Unknown" }}</td>
+                <td>
+                    <ul>
+                        {% for vaccination in record.vaccinations.all %}
+                            <li>{{ vaccination.vaccine.name }} ({{ vaccination.date_administered }})</li>
+                        {% empty %}
+                            <li>No vaccinations recorded.</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No medical records found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

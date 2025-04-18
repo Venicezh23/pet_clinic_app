@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}All Appointments{% endblock %}
+
+{% block content %}
+<h2>All Appointments</h2>
+
+<!-- Pet Filter Dropdown -->
+<form method="GET" action="{% url 'appointments:appointment_list' %}">
+    <label for="pet_filter">Filter by Pet:</label>
+    <select name="pet_id" id="pet_filter" onchange="this.form.submit()">
+        <option value="">All Pets</option>
+        {% for pet in owner_pets %}
+            <option value="{{ pet.id }}" {% if pet.id|stringformat:"s" == selected_pet_id %}selected{% endif %}>
+                {{ pet.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<!-- Show reminder if there are upcoming appointments -->
+{% if upcoming_appointments %}
+    <div class="alert alert-info">
+        You have upcoming appointments tomorrow!
+    </div>
+{% endif %}
+
+<!-- Appointment List -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Pet</th>
+            <th>Veterinarian</th>
+            <th>Date & Time</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+            <tr {% if appointment in upcoming_appointments %} class="table-warning" {% endif %}>
+                <td>{{ appointment.pet.name }}</td>
+                <td>{{ appointment.vet.name }}</td>
+                <td>{{ appointment.appt_datetime }}</td>
+                <td>{{ appointment.status }}</td>
+                <td>{{ appointment.description }}</td>
+                <td>
+                    {% if appointment in upcoming_appointments %}
+                        <span class="text-danger">❗</span> <!-- Red exclamation mark -->
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No appointments found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

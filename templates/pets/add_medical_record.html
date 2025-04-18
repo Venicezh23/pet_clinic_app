@@ -1,0 +1,18 @@
+<form method="post">
+    {% csrf_token %}
+
+    <label for="clinic_name">Clinic Name:</label>
+    <input type="text" name="clinic_name" id="clinic_name">
+
+    <label for="vaccines">Vaccines:</label>
+    <select name="vaccines" id="vaccines" multiple>
+        {% for vaccine in vaccines %}
+            <option value="{{ vaccine.id }}">{{ vaccine.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="date_administered">Date Administered (Month/Year):</label>
+    <input type="month" name="date_administered" id="date_administered">
+
+    <button type="submit">Submit</button>
+</form>
