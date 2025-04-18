@@ -60,6 +60,20 @@
   .register-box a:hover {
     text-decoration: underline;
   }
+
+  .validation-message {
+    font-size: 0.9em;
+    margin-top: 4px;
+  }
+
+  .valid {
+    color: green;
+  }
+
+  .invalid {
+    color: red;
+  }
+
 </style>
 
 <div class="register-box">
@@ -86,7 +100,33 @@
 
 <script>
 
+    const passwdInput = document.getElementById("id_password1");
+    const messageDiv = document.getElementById("password-check");
 
+    passwdInput.addEventListener("input", function() {
+        const value = passwdInput.value();
+        let messages = [];
+        let valid = true;
+
+        if (value.length < 8) {
+            messages.push("❌ Password needs to be at least 8 characters");
+            valid = false;
+        } else {
+            messages.push("✅ 8 characters");
+        }
+
+        const numCount = (value.match(/\d/g) || []).length;
+        if (numCount < 3) {
+            messages.push("❌ Password needs at least 3 numbers");
+            valid = false;
+        } else {
+            messages.push("✅ 3 numbers");
+        }
+
+        messageDiv.innerHTML = messages
+        .map(msg => `<div class="${msg.startsWith('✅') ? 'valid' : 'invalid'}">${msg}</div>`)
+        .join("");
+    })
 
 </script>
 
