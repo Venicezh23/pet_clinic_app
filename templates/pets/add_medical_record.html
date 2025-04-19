@@ -1,18 +1,41 @@
-<form method="post">
-    {% csrf_token %}
+{% extends "base.html" %}
 
-    <label for="clinic_name">Clinic Name:</label>
-    <input type="text" name="clinic_name" id="clinic_name">
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4">
+        <div class="card-header bg-success text-white rounded-top-4">
+            <h4 class="mb-0">Add Medical Record</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
 
-    <label for="vaccines">Vaccines:</label>
-    <select name="vaccines" id="vaccines" multiple>
-        {% for vaccine in vaccines %}
-            <option value="{{ vaccine.id }}">{{ vaccine.name }}</option>
-        {% endfor %}
-    </select>
+                <div class="mb-3">
+                    <label for="clinic_name" class="form-label">Clinic Name:</label>
+                    <input type="text" name="clinic_name" id="clinic_name" class="form-control" required>
+                </div>
 
-    <label for="date_administered">Date Administered (Month/Year):</label>
-    <input type="month" name="date_administered" id="date_administered">
+                <div class="mb-3">
+                    <label for="vaccines" class="form-label">Vaccines:</label>
+                    <select name="vaccines" id="vaccines" class="form-select" multiple required>
+                        {% for vaccine in vaccines %}
+                            <option value="{{ vaccine.id }}">{{ vaccine.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-text">Hold Ctrl (Cmd on Mac) to select multiple vaccines.</div>
+                </div>
 
-    <button type="submit">Submit</button>
-</form>
+                <div class="mb-3">
+                    <label for="date_administered" class="form-label">Date Administered (Month/Year):</label>
+                    <input type="month" name="date_administered" id="date_administered" class="form-control" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
