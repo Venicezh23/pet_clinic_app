@@ -10,9 +10,7 @@ from datetime import timedelta
 from django.conf import settings
 
 def generate_signed_url(blob_name):
-    credentials = service_account.Credentials.from_service_account_file(
-        settings.GS_CREDENTIALS
-    )
+    credentials = settings.GS_CREDENTIALS
     client = storage.Client(credentials=credentials, project=settings.GS_PROJECT_ID)
     bucket = client.bucket(settings.GS_BUCKET_NAME)
     blob = bucket.blob(blob_name)

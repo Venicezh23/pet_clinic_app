@@ -102,9 +102,9 @@ WSGI_APPLICATION = 'django_on_cloudrun.wsgi.application'
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': BASE_DIR / 'db.sqlite3',
 #        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': <database_name>,
-#        'USER': <username>,               # Default username unless you changed it
-#        'PASSWORD': <password>,   # Set your password
+#        'NAME': '<database_name>',
+#        'USER': '<database_admin_name>',               # Default username unless you changed it
+#        'PASSWORD': '<database password>',   # Set your password
 #        'HOST': '127.0.0.1',          # PRIMARY_ADDRESS
 #        'PORT': '5432',
 #    }
@@ -113,11 +113,11 @@ WSGI_APPLICATION = 'django_on_cloudrun.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django-dev-db',
-        'USER': 'postgres',
-        'PASSWORD': '4c*y%AcT}dXmch]v',
-        #'HOST': '/cloudsql/pet-tracker-app-453709:asia-southeast1:django-dev-db',
-        'HOST': '127.0.0.1',
+        'NAME': '<database name>',
+        'USER': '<database_admin_name>',
+        'PASSWORD': '<database password>',
+        'HOST': '/cloudsql/pet-tracker-app-453709:asia-southeast1:django-dev-db',
+        #'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -156,7 +156,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+#STATIC_URL = 'static/'
 
 
 # Default primary key field type
@@ -165,9 +165,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Media Files
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_ROOT = BASE_DIR / 'media'
 
 # Google Cloud Storage for media files
 #DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
@@ -181,34 +181,33 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #    }
 #}
 
-GS_BUCKET_NAME = 'pet-tracker-media'  # Replace with your actual bucket name
+# Load credentials from the JSON file
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'pet-tracker-app-453709-622cc6ce39f1.json')
+)
+
+GS_BUCKET_NAME = 'pet-tracker-media'
 GS_PROJECT_ID = 'pet-tracker-app-453709'
-# THIS IS VERY IMPORTANT
-GS_CREDENTIALS = 'pet-tracker-app-453709-622cc6ce39f1.json'
 
-#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#    os.path.join(BASE_DIR, 'path', 'to', 'your', 'keyfile.json')
-#)
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/pet_photos/'
 
-# MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/pet_photos/'
+STATIC_URL = "/static/"
 
-# STATIC_URL = "/static/"
-
-# # Use STORAGES exclusively
-# STORAGES = {
-#     "default": {
-#         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-#         "OPTIONS": {
-#             "bucket_name": GS_BUCKET_NAME,
-#         },
-#     },
-#     "staticfiles": {
-#         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-#         "OPTIONS": {
-#             "bucket_name": GS_BUCKET_NAME,
-#         },
-#     },
-# }
+# Use STORAGES exclusively
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": GS_BUCKET_NAME,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": GS_BUCKET_NAME,
+        },
+    },
+}
 
 #GS_DEFAULT_ACL = "publicRead"
 

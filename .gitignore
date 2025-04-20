@@ -19,4 +19,4 @@ __pycache__/
 *.log
 
 #JSON file
-pet-tracker-app-*.json
+#pet-tracker-app-*.json
