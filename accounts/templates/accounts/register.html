@@ -87,6 +87,7 @@
 
     <label for="id_password1">Password:</label>
     {{ form.password1 }}
+    <div id="password-check" class="validation-message"></div>
     {{ form.password1.errors }}
 
     <label for="id_password2" class="validation-message">Confirm Password:</label>
@@ -99,35 +100,56 @@
 </div>
 
 <script>
+  const passwdInput = document.getElementById("id_password1");
+  const form = document.querySelector("form");
+  const messageDiv = document.getElementById("password-check");
 
-    const passwdInput = document.getElementById("id_password1");
-    const messageDiv = document.getElementById("password-check");
+  function validatePassword(value) {
+      let messages = [];
+      let valid = true;
 
-    passwdInput.addEventListener("input", function() {
-        const value = passwdInput.value();
-        let messages = [];
-        let valid = true;
+      const numCount = (value.match(/\d/g) || []).length;
+      if (numCount < 3) {
+          messages.push("❌ Password needs at least 3 numbers");
+          valid = false;
+      } else {
+          messages.push("✅ Has at least 3 numbers");
+      }
 
-        if (value.length < 8) {
-            messages.push("❌ Password needs to be at least 8 characters");
-            valid = false;
-        } else {
-            messages.push("✅ 8 characters");
-        }
+      const specialCharMatch = value.match(/[^A-Za-z0-9]/g);
+      if (!specialCharMatch || specialCharMatch.length < 1) {
+          messages.push("❌ Password needs at least 1 special character");
+          valid = false;
+      } else {
+          messages.push("✅ Has at least 1 special character");
+      }
 
-        const numCount = (value.match(/\d/g) || []).length;
-        if (numCount < 3) {
-            messages.push("❌ Password needs at least 3 numbers");
-            valid = false;
-        } else {
-            messages.push("✅ 3 numbers");
-        }
+      if (value.length < 8) {
+          messages.push("❌ Password needs to be at least 8 characters");
+          valid = false;
+      } else {
+          messages.push("✅ Has at least 8 characters");
+      }
 
-        messageDiv.innerHTML = messages
-        .map(msg => `<div class="${msg.startsWith('✅') ? 'valid' : 'invalid'}">${msg}</div>`)
-        .join("");
-    })
+      messageDiv.innerHTML = messages
+          .map(msg => `<div class="${msg.startsWith('✅') ? 'valid' : 'invalid'}">${msg}</div>`)
+          .join("");
 
+      return valid;
+  }
+
+  passwdInput.addEventListener("input", function () {
+      validatePassword(passwdInput.value);
+  });
+
+  form.addEventListener("submit", function (e) {
+      const isValid = validatePassword(passwdInput.value);
+      if (!isValid) {
+          e.preventDefault(); // stop form submission
+          alert("Please fix the password requirements before submitting.");
+      }
+  });
 </script>
+
 
 {% endblock %}
