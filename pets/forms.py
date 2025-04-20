@@ -13,9 +13,9 @@ class PetProfileForm(forms.ModelForm):
         fields = ["name", "breed", "dob", "photo"]
 
     def save(self, commit=True):
-        # Automatically set the owner to the currently logged-in user
+        #pet profile created linked to pet owner
         pet_profile = super().save(commit=False)
-        pet_profile.owner = self.instance.owner  # Set the owner from the instance (usually the logged-in user)
+        pet_profile.owner = self.instance.owner  #set owner instance
         
         if commit:
             pet_profile.save()
@@ -24,7 +24,7 @@ class PetProfileForm(forms.ModelForm):
 class MedicalRecordForm(forms.ModelForm):
     class Meta:
         model = MedicalRecord
-        fields = ['clinic_name', 'vaccines']  # Removed 'appointment', 'vet'
+        fields = ['clinic_name', 'vaccines']
 
 class VaccinationForm(forms.ModelForm):
     class Meta:

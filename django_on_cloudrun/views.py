@@ -9,6 +9,7 @@ from google.oauth2 import service_account
 from datetime import timedelta
 from django.conf import settings
 
+#generate urls for photos using GS credentials - link to cloud storage
 def generate_signed_url(blob_name):
     credentials = settings.GS_CREDENTIALS
     client = storage.Client(credentials=credentials, project=settings.GS_PROJECT_ID)

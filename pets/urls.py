@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import medical_record_list, add_medical_record, add_vaccination, edit_pet_profile
 
-app_name = 'pets'
+app_name = 'pets' #placeholder - need to add in for url referencing
 
 urlpatterns = [
     path('medical-records/', medical_record_list, name='medical_record_list'),

@@ -16,25 +16,9 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-def generate_signed_url(blob_name):
-    try:
-        client = storage.Client()
-        bucket = client.bucket(settings.GS_BUCKET_NAME)
-        blob = bucket.blob(blob_name)
-        # url = blob.generate_signed_url(
-        #     expiration=timedelta(minutes=10),  # expires in 10 minutes
-        #     method='GET'
-        # )
-        url = "https://storage.googleapis.com/pet-tracker-media/pet_photos/485759560_122119334834759930_2183957526026299912_n.jpg"
-        logger.info(f"Generated signed URL: {url}")
-        return url
-    except Exception as e:
-        logger.error(f"Error generating signed URL for blob {blob_name}: {e}")
-        return None
-
 @login_required
 def add_pet_profile(request):
-    if not hasattr(request.user, 'petowner'): #check if PetOwner exists
+    if not hasattr(request.user, 'petowner'): #check if petowner exists
         return redirect("register") #redirect to register pg
 
     if request.method == "POST":
@@ -43,10 +27,10 @@ def add_pet_profile(request):
         if form.is_valid():
             print("Form is valid")
             pet = form.save(commit=False)
-            pet.owner = request.user.petowner  # Assign logged-in user as the owner
+            pet.owner = request.user.petowner  #assign logged in user as pet owner
             pet.save()
             print("Pet saved:", pet.id, pet.name, pet.photo)
-            return redirect('home')  # Redirect to a page that shows pet profiles
+            return redirect('home') #homepage
     else:
         form = PetProfileForm()
 
@@ -54,61 +38,21 @@ def add_pet_profile(request):
 
 @login_required
 def edit_pet_profile(request, pet_id):
-    # Get the PetOwner instance
+    #pet owner that was logged in
     pet_owner = get_object_or_404(PetOwner, user=request.user)
 
-    # Now filter PetProfile using pet_owner
+    #filter pet profile
     pet = get_object_or_404(PetProfile, id=pet_id, owner=pet_owner)
 
     if request.method == "POST":
         form = PetProfileForm(request.POST, request.FILES, instance=pet)
         if form.is_valid():
             form.save()
-            return redirect('home')  # Redirect to the home page
+            return redirect('home')
     else:
         form = PetProfileForm(instance=pet)
 
     return render(request, 'pets/edit_pet_profile.html', {'form': form, 'pet': pet})
-
-
-@login_required
-def home(request):
-    try:
-        pet_owner = PetOwner.objects.get(user=request.user)
-        pets = PetProfile.objects.filter(owner=pet_owner)
-
-        for pet in pets:
-            if pet.photo and pet.photo.name:
-                pet.signed_url = generate_signed_url(pet.photo.name)
-            else:
-                pet.signed_url = None
-
-    except PetOwner.DoesNotExist:
-        pets = []
-
-    return render(request, "home.html", {"pets": pets})
-
-
-# @login_required
-# def pet_list(request):
-#     try:
-#         pet_owner = PetOwner.objects.get(user=request.user)
-#         pets = PetProfile.objects.filter(owner=pet_owner)
-
-#         for pet in pets:
-#             if pet.photo and pet.photo.name:
-#                 pet.signed_url = generate_signed_url(pet.photo.name)
-#             else:
-#                 pet.signed_url = None
-
-#     except PetOwner.DoesNotExist:
-#         pets = []
-
-#     return render(request, "pets/pet_list.html", {"pets": pets})
-
-
-
-##NOTE: Need login required?
 
 @login_required
 def medical_record_list(request):
@@ -156,8 +100,7 @@ def add_medical_record(request, pet_id):
             Vaccination.objects.create(
                 medical_record=medical_record,
                 vaccine=vaccine,
-                date_administered=f"{date_administered}-01"  # stores as full date
-                # No expiry entered by user
+                date_administered=f"{date_administered}-01"
             )
 
         return redirect('home')
@@ -173,7 +116,7 @@ def add_vaccination(request):
         form = VaccinationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('pets:medical_record_list')  # Redirect to medical records list
+            return redirect('pets:medical_record_list') #go back to medical record table
     else:
         form = VaccinationForm()
     return render(request, 'pets/add_vaccination.html', {'form': form})
