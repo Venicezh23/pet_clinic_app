@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Edit Appointment for {{ appointment.pet.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update Appointment</button>
+    <a href="{% url 'appointments:appointment_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}

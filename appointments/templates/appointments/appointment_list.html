@@ -34,6 +34,7 @@
             <th>Date & Time</th>
             <th>Status</th>
             <th>Description</th>
+            <th>Update Appointment</th>
             <th></th>
         </tr>
     </thead>
@@ -45,6 +46,9 @@
                 <td>{{ appointment.appt_datetime }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ appointment.description }}</td>
+                <td>
+                    <a href="{% url 'appointments:edit_appointment' appointment.id %}" class="btn btn-sm btn-warning">Edit</a>
+                </td>
                 <td>
                     {% if appointment in upcoming_appointments %}
                         <span class="text-danger">❗</span> <!-- Red exclamation mark -->

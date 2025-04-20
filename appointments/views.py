@@ -32,6 +32,21 @@ def book_appointment(request, pet_id):
     return render(request, "appointments/book_appointment.html", {"form": form, "pet": pet, "veterinarians": veterinarians})
 
 @login_required
+def edit_appointment(request, appointment_id):
+    pet_owner = get_object_or_404(PetOwner, user=request.user)
+    appointment = get_object_or_404(Appointment, id=appointment_id, pet__owner=pet_owner)
+
+    if request.method == "POST":
+        form = AppointmentForm(request.POST, instance=appointment)
+        if form.is_valid():
+            form.save()
+            return redirect("appointments:appointment_list")
+        
+    else:
+        form = AppointmentForm(instance=appointment)
+    return render(request, "appointments/edit_appointment.html", {"form": form, "appointment": appointment})
+
+@login_required
 def appointment_list(request):
     try:
         pet_owner = PetOwner.objects.get(user=request.user)
