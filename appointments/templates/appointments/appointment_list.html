@@ -5,7 +5,7 @@
 {% block content %}
 <h2>All Appointments</h2>
 
-<!-- Pet Filter Dropdown -->
+<!--Pet profile dropdown filter-->
 <form method="GET" action="{% url 'appointments:appointment_list' %}">
     <label for="pet_filter" style="padding-top: 20px; padding-bottom: 20px;">Filter by Pet:</label>
     <select name="pet_id" id="pet_filter" onchange="this.form.submit()">
@@ -18,7 +18,7 @@
     </select>
 </form>
 
-<!-- Show reminder if there are upcoming appointments -->
+<!--Show reminder if there are upcoming appointments-->
 {% if upcoming_appointments %}
     <div class="alert alert-info">
         You have upcoming appointments tomorrow!
@@ -35,25 +35,25 @@
             <th>Status</th>
             <th>Description</th>
             <th>Update Appointment</th>
-            <th></th>
+            <th></th> <!--empty column for exclaimation mark for upcoming uppointment-->
         </tr>
     </thead>
     <tbody>
         {% for appointment in appointments %}
-            <tr {% if appointment in upcoming_appointments %} class="table-warning" {% endif %}>
+            <tr {% if appointment in upcoming_appointments_ids %} class="table-warning" {% endif %}>
                 <td>{{ appointment.pet.name }}</td>
                 <td>{{ appointment.vet.name }}</td>
                 <td>{{ appointment.appt_datetime }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>{{ appointment.description }}</td>
-                <td>
+                <td> <!--edit appointment-->
                     <a href="{% url 'appointments:edit_appointment' appointment.id %}" class="btn btn-sm btn-warning">Edit</a>
                 </td>
-                <td>
-                    {% if appointment in upcoming_appointments %}
-                        <span class="text-danger">❗</span> <!-- Red exclamation mark -->
+                <td> <!--make sure only appointments that are 'booked' and in 24 hours are marked-->
+                    {% if appointment in upcoming_appointments and appointment.status != 'done' and appointment.status != 'cancelled' %}
+                        <span class="text-danger">❗</span>
                     {% endif %}
-                </td>
+                </td>                
             </tr>
         {% empty %}
             <tr>

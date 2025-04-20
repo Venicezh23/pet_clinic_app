@@ -3,11 +3,32 @@
 
 <h2>Edit Appointment for {{ appointment.pet.name }}</h2>
 
-<form method="post">
+<form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Update Appointment</button>
-    <a href="{% url 'appointments:appointment_list' %}" class="btn btn-secondary">Cancel</a>
+    
+    <div class="mb-3">
+        <label for="id_appt_datetime" class="form-label">Date & Time:</label>
+        {{ form.appt_datetime }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_vet" class="form-label">Veterinarian:</label>
+        {{ form.vet }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_description" class="form-label">Description:</label>
+        {{ form.description }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_status" class="form-label">Status:</label>
+        {{ form.status }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
 </form>
+
 
 {% endblock %}

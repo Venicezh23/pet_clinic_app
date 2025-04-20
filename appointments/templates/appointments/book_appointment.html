@@ -15,13 +15,9 @@
                         {% csrf_token %}
                         
                         <div class="mb-3">
-                            <label for="vet" class="form-label">Select a Veterinarian:</label>
-                            <select name="vet" id="vet" class="form-select" required>
-                                {% for vet in veterinarians %}
-                                    <option value="{{ vet.id }}">{{ vet.name }} - {{ vet.expertise }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <label for="id_vet" class="form-label">Select a Veterinarian:</label>
+                            {{ form.vet }}
+                        </div>                        
 
                         <div class="mb-3">
                             <label for="appt_datetime" class="form-label">Appointment Date & Time:</label>

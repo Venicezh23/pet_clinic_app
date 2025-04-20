@@ -13,7 +13,7 @@ class Veterinarian(models.Model):
 
 
 class Appointment(models.Model):
-    STATUS_CHOICES = [
+    STATUS_CHOICES = [ #have different status
         ('booked', 'Booked'),
         ('done', 'Done'),
         ('cancelled', 'Cancelled'),

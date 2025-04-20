@@ -9,4 +9,4 @@ class AppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        fields = ["vet", "appt_datetime", "description", "status"]
+        fields = ["vet", "appt_datetime", "description"]
