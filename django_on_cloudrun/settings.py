@@ -24,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_un_=g&ea2%ls35_r3t!*2ty-i)x3-w-q@1=q+knq=3+&ws+p9'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 #ALLOWED_HOSTS = ['pet-health-tracker-382013273863.asia-southeast1.run.app', 'localhost', '127.0.0.1']
 #ALLOWED_HOSTS = [
@@ -113,11 +113,10 @@ WSGI_APPLICATION = 'django_on_cloudrun.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '<database name>',
-        'USER': '<database_admin_name>',
-        'PASSWORD': '<database password>',
-        'HOST': '/cloudsql/pet-tracker-app-453709:asia-southeast1:django-dev-db',
-        #'HOST': '127.0.0.1',
+        'NAME': '<database_name>',
+        'USER': '<database_admin_name>',               # Default username unless you changed it
+        'PASSWORD': '<database password>',   # Set your password
+        'HOST': '127.0.0.1',          # PRIMARY_ADDRESS
         'PORT': '5432',
     }
 }
@@ -223,3 +222,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://django-dev-app-382013273863.asia-southeast1.run.app',
     'https://django-dev-app-ksx4vbtkqa-as.a.run.app',
 ]
+
+# Security Settings for Production
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
