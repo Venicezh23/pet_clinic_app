@@ -9,12 +9,14 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import google.cloud.logging
 from pathlib import Path
 import os
 #import dj_database_url
 from django.core.files.storage import default_storage
 from google.oauth2 import service_account
+from google.cloud.logging.handlers import CloudLoggingHandler
+import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -114,9 +116,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': '<database_name>',
-        'USER': '<database_admin_name>',               # Default username unless you changed it
-        'PASSWORD': '<database password>',   # Set your password
-        'HOST': '127.0.0.1',          # PRIMARY_ADDRESS
+        'USER': '<database_admin_name>',
+        'PASSWORD': '<database_password>',
+        #'HOST': '/cloudsql/pet-tracker-app-453709:asia-southeast1:django-dev-db',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -180,6 +183,67 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #    }
 #}
 
+# client = google.cloud.logging.Client()
+# cloud_handler = CloudLoggingHandler(client)
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'google_cloud': {
+#             'level': 'INFO',
+#             'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+#             'client': client,
+#         },
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs', 'application.log'),
+#         },
+#     },
+#     'root': {
+#         'handlers': ['google_cloud', 'file'],
+#         'level': 'INFO',
+#     },
+# }
+if not DEBUG:
+    # Production: Use Google Cloud Logging
+    client = google.cloud.logging.Client()
+    cloud_handler = CloudLoggingHandler(client)
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'google_cloud': {
+                'level': 'INFO',
+                'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+                'client': client,
+            },
+        },
+        'root': {
+            'handlers': ['google_cloud'],
+            'level': 'INFO',
+        },
+    }
+else:
+    # Local: Use file-based logging
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(BASE_DIR, 'logs', 'application.log'),
+            },
+        },
+        'root': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+    }
+
 # Load credentials from the JSON file
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
     os.path.join(BASE_DIR, 'pet-tracker-app-453709-622cc6ce39f1.json')
@@ -207,16 +271,6 @@ STORAGES = {
         },
     },
 }
-
-#GS_DEFAULT_ACL = "publicRead"
-
-# Uncomment if you have any custom settings for static files
-# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-
-# Uncomment if using django < 4.2
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-
-# settings.py
 
 CSRF_TRUSTED_ORIGINS = [
     'https://django-dev-app-382013273863.asia-southeast1.run.app',

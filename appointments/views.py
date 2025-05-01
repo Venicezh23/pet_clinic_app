@@ -14,6 +14,9 @@ from django.utils.timezone import make_aware, get_current_timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 
+import logging
+logger = logging.getLogger('appointments')
+
 @login_required
 def book_appointment(request, pet_id):
     pet = get_object_or_404(PetProfile, id=pet_id, owner=request.user.petowner)
@@ -25,6 +28,7 @@ def book_appointment(request, pet_id):
             appointment = form.save(commit=False)
             appointment.pet = pet
             appointment.save()
+            logger.info(f"User '{request.user.username}' booked an appointment")
             return redirect("home")  #go back to home page
     else:
         form = AppointmentForm()
