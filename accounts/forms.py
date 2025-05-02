@@ -6,6 +6,12 @@ from django.core.exceptions import ValidationError
 import re
 
 class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, help_text="Enter a valid email address.")
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
 

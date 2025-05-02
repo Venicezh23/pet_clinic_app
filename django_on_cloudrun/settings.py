@@ -26,10 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+#SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+#DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+DEBUG = True
 
 #ALLOWED_HOSTS = ['pet-health-tracker-382013273863.asia-southeast1.run.app', 'localhost', '127.0.0.1']
 #ALLOWED_HOSTS = [
@@ -183,31 +184,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #    }
 #}
 
-# client = google.cloud.logging.Client()
-# cloud_handler = CloudLoggingHandler(client)
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'google_cloud': {
-#             'level': 'INFO',
-#             'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
-#             'client': client,
-#         },
-#         'file': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs', 'application.log'),
-#         },
-#     },
-#     'root': {
-#         'handlers': ['google_cloud', 'file'],
-#         'level': 'INFO',
-#     },
-# }
+#logging - either production or local testing
 if not DEBUG:
-    # Production: Use Google Cloud Logging
     client = google.cloud.logging.Client()
     cloud_handler = CloudLoggingHandler(client)
 
@@ -227,7 +205,6 @@ if not DEBUG:
         },
     }
 else:
-    # Local: Use file-based logging
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -283,3 +260,13 @@ CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "<email_to_send_from>"
+EMAIL_HOST_PASSWORD = "<app_password>"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
