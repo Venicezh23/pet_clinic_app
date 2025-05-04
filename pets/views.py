@@ -29,6 +29,7 @@ def add_pet_profile(request):
             pet = form.save(commit=False)
             pet.owner = request.user.petowner  #assign logged in user as pet owner
             pet.save()
+            logger.info(f"User '{request.user.username}' added pet: ID={pet.id}, Name={pet.name}")
             print("Pet saved:", pet.id, pet.name, pet.photo)
             return redirect('home') #homepage
     else:
@@ -48,6 +49,7 @@ def edit_pet_profile(request, pet_id):
         form = PetProfileForm(request.POST, request.FILES, instance=pet)
         if form.is_valid():
             form.save()
+            logger.info(f"User '{request.user.username}' edited pet: ID={pet.id}, Name={pet.name}")
             return redirect('home')
     else:
         form = PetProfileForm(instance=pet)

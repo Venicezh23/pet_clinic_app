@@ -28,7 +28,7 @@ def book_appointment(request, pet_id):
             appointment = form.save(commit=False)
             appointment.pet = pet
             appointment.save()
-            logger.info(f"User '{request.user.username}' booked an appointment")
+            logger.info(f"User '{request.user.username}' booked an appointment with pet:{pet.id}, Name={pet.name}")
             return redirect("home")  #go back to home page
     else:
         form = AppointmentForm()
@@ -70,8 +70,8 @@ def appointment_list(request):
         now = timezone.now()
         next_24_hours = now + timedelta(hours=24)
         upcoming_appointments = appointments.filter(
-            appt_datetime__gte=now, appt_datetime__lte=next_24_hours
-            ).exclude(status__in=['Done', 'Cancelled'])
+                appt_datetime__range=(now, next_24_hours)
+            ).exclude(status__in=['Done', 'Cancelled', '', None, 'None', 'done', 'cancelled'])
         
         upcoming_appointment_ids = list(upcoming_appointments.values_list('id', flat=True))
 
