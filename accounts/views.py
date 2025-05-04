@@ -24,8 +24,8 @@ def register(request):
             request.session["user_id"] = user.id
 
             send_mail(
-                "Your OTP code",
-                f"Your OTP code is: {otp}",
+                "Your OTP code For Pet Clinic App",
+                f"This is an automatically generated email. Your OTP code is: {otp}, please do not share this OTP with anyone else.",
                 settings.DEFAULT_FROM_EMAIL,
                 [user.email],
                 fail_silently=False
